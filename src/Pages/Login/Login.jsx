@@ -1,28 +1,40 @@
 import loginImg from '../../../assets/others/authentication2.png'
 import loginPng from '../../../assets/others/authentication.png'
 import { loadCaptchaEnginge, LoadCanvasTemplate, LoadCanvasTemplateNoReload, validateCaptcha } from 'react-simple-captcha';
-import { useContext, useEffect, useRef, useState } from 'react';
-import { AuthContext } from '../../Providers/AuthProvider';
+import {  useEffect,  useState } from 'react';
+
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import SocialLogin from '../../Components/SocialLogin/SocialLogin';
+import UseAuth from '../../Hooks/UseAuth';
 
 const Login = () => {
 
     const location = useLocation()
     const navigate = useNavigate()
+    const { login } = UseAuth()
 
     const from = location.state?.from?.pathname || "/";
 
-    
+
 
     const [disabled, setDisabled] = useState(true)
 
-    const { login } = useContext(AuthContext)
+    
 
 
     useEffect(() => {
         loadCaptchaEnginge(6)
     }, [])
+
+
+
+    
+
+
+
+
+
 
     const handleLogin = e => {
 
@@ -120,7 +132,9 @@ const Login = () => {
                                 <input disabled={disabled} type="submit" value="Login" className="btn" style={{ backgroundColor: "rgba(209, 160, 84, 0.70)" }} />
                             </div>
                             <p className='text-center'>New here?<Link style={{ backgroundColor: "rgba(209, 160, 84, 0.70)" }} to={'/signUp'}> Create a New Account</Link></p>
+                            <SocialLogin></SocialLogin>
                         </form>
+
                     </div>
                 </div>
             </div>

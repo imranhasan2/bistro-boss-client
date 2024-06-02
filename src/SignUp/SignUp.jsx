@@ -6,14 +6,22 @@ import { useForm } from 'react-hook-form';
 import { useContext } from 'react';
 import { AuthContext } from '../Providers/AuthProvider';
 import Swal from 'sweetalert2';
+import usePublicAxios from '../Hooks/usePublicAxios';
+import SocialLogin from '../Components/SocialLogin/SocialLogin';
+
 
 
 const SignUp = () => {
+     
 
     const { createUser, updateUserProfile } = useContext(AuthContext)
+    const axiosPublic = usePublicAxios()
 
 
-    const { register, handleSubmit,reset, formState: { errors }, } = useForm()
+
+   
+
+    const { register, handleSubmit, reset, formState: { errors }, } = useForm()
 
     const onSubmit = (data) => {
         console.log(data)
@@ -23,15 +31,26 @@ const SignUp = () => {
                 console.log(loggedUser)
                 updateUserProfile(data.name, data.photo)
                     .then(() => {
-                        console.log('updated profile')
-                        Swal.fire({
-                            position: "top-end",
-                            icon: "success",
-                            title: "Update Profile successFully",
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                        reset()
+                        //create user in database
+                        const userInfo = {
+                            name: data.name,
+                            email: data.email
+                        }
+
+                        axiosPublic.post('/users', userInfo)
+                            .then(res => {
+                                console.log('user addeded to the database')
+                                if (res.data.insertedId)
+                                    Swal.fire({
+                                        position: "top-end",
+                                        icon: "success",
+                                        title: "Update Profile successFully",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                reset()
+                            })
+
                     })
 
             })
@@ -102,6 +121,8 @@ const SignUp = () => {
                             </div>
 
                             <p className='text-center'>Already have an Account?<Link style={{ backgroundColor: "rgba(209, 160, 84, 0.70)" }} to={'/login'}> Please Login</Link></p>
+
+                          <SocialLogin></SocialLogin>
                         </form>
                     </div>
                 </div>
