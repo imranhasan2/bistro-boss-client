@@ -36,15 +36,19 @@ const AuthProvider = ({ children }) => {
     }
 
 
-    const logOut = () => {
+    const logOut = async () => {
         setLoading(true)
-        return signOut(auth)
+        localStorage.removeItem('access-token')
+        await signOut(auth);
+        setUser(null);
+        setLoading(false);
     }
 
     const googleProvider = new GoogleAuthProvider();
 
 
     const googleSignIn = () => {
+      
         setLoading(true)
         return signInWithPopup(auth, googleProvider)
     }
@@ -72,7 +76,7 @@ const AuthProvider = ({ children }) => {
                     .then(res => {
                         if (res.data.token) {
                             localStorage.setItem('access-token', res.data.token)
-                            setLoading(false); 
+                            setLoading(false);
                         }
                     })
             } else {

@@ -4,11 +4,12 @@ import { MdOutlineRateReview } from "react-icons/md";
 import { TbBrandBooking } from "react-icons/tb";
 import { NavLink, Outlet } from "react-router-dom";
 import useCart from "../../Hooks/useCart";
+import useAdmin from "../../Hooks/useAdmin";
 
 
 const DashBoard = () => {
 
-    const isAdmin = true;
+    const[ isAdmin ]=useAdmin();
     const [cart] = useCart()
     return (
         <div className="flex">
